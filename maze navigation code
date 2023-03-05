@@ -1,0 +1,111 @@
+int motor1pin1 = 8;
+int motor1pin2 = 10;
+int motor2pin1 = 9;
+int motor2pin2 = 11;
+int trigPin = 4;
+int echoPin = 5;
+int trigPin2 = 12;
+int echoPin2 = 13;
+int motor1speed = 3;
+int motor2speed = 2;
+
+void setup() {
+  pinMode(trigPin, OUTPUT); // Sets the trigPin as an OUTPUT
+  pinMode(echoPin, INPUT); // Sets the echoPin as an INPUT
+  pinMode(trigPin2, OUTPUT); // Sets the trigPin as an OUTPUT
+  pinMode(echoPin2, INPUT); // Sets the echoPin as an INPUT
+  Serial.begin(9600);
+  pinMode(motor1pin1, OUTPUT);
+  pinMode(motor1pin2, OUTPUT);
+  pinMode(motor2pin1, OUTPUT);
+  pinMode(motor2pin2, OUTPUT);
+  pinMode(motor1speed, OUTPUT);
+  pinMode(motor2speed, OUTPUT);
+
+}
+
+void Forward(void){
+  digitalWrite(motor1pin1, HIGH);
+  digitalWrite(motor1pin2, LOW);
+  digitalWrite(motor2pin1, LOW);
+  digitalWrite(motor2pin2, HIGH);
+  analogWrite (motor1speed, 255); // left?
+  analogWrite (motor2speed, 255); // right?
+}
+
+void Brake(void){
+  digitalWrite(motor1pin1, LOW);
+  digitalWrite(motor1pin2, HIGH);
+  digitalWrite(motor2pin1, HIGH);
+  digitalWrite(motor2pin2, LOW);
+  analogWrite (motor1speed, 255); // left?
+  analogWrite (motor2speed, 255); // right?
+  delay (100);
+}
+ 
+void Left(void){
+  digitalWrite(motor1pin1,LOW);
+  digitalWrite(motor1pin2, HIGH);
+  digitalWrite(motor2pin1, LOW);
+  digitalWrite(motor2pin2, HIGH);
+  analogWrite (motor1speed, 255); // left?
+  analogWrite (motor2speed, 255); // right?
+  delay (110);
+}
+
+void Right(void){
+  digitalWrite(motor1pin1,HIGH);
+  digitalWrite(motor1pin2, LOW);
+  digitalWrite(motor2pin1, HIGH);
+  digitalWrite(motor2pin2, LOW);
+  analogWrite (motor1speed, 255); // left?
+  analogWrite (motor2speed, 255); // right?
+  delay (100);
+}
+
+/*int Sense(int trig, int echo, int dis) {
+  digitalWrite(trig, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trig, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trig, LOW);
+  long duration = pulseIn(echo, HIGH);
+  return dis = duration * 0.034 / 2;
+}*/
+
+void loop1(){
+  //Serial.println(distance);
+  //Serial.println(distance2);
+}
+
+void loop() {
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2); //m
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  
+  float duration = pulseIn(echoPin, HIGH);
+
+  digitalWrite(trigPin2, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin2, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin2, LOW);
+  float duration2 = pulseIn(echoPin2, HIGH);
+  
+  float distance = (duration * 0.034 / 2);
+  float distance2 = (duration2 * 0.034 / 2);
+
+  if (distance < 23) {
+    Brake();
+    if (distance2 < 17){
+      Left();
+      Forward();}
+    else {
+      Right();
+      Forward();}
+    }
+  else{
+    Forward();}
+}
